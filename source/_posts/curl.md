@@ -1,3 +1,9 @@
+---
+title: curl总结
+date: 2019-09-09 22:55:11
+tags: linux
+---
+
 #### POST请求  
 ##### 发送一个post请求
 ```
