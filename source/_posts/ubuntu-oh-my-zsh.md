@@ -78,4 +78,8 @@ $ source ~/.zshrc
 下面是大概的效果：
 ![](https://narlim.github.io/nototaku/post-images/1565452618720.png)
 
-结束！
+20190909更新：  
+发现如果目录的路径太长，光标跟着移动，敲命令的空间就会很小。可以修改一些.zshrc文件，在合适的位置添加：  
+`POWERLEVEL9K_PROMPT_ON_NEWLINE=true`  
+`source ~/.zshrc`  
+这样主题的prompt就会显示在光标的上方。光标的开始永远在开头。
