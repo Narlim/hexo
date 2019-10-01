@@ -77,13 +77,13 @@ operator 模块有 `itemgetter()` 、 `attrgetter()` 和 `methodcaller()` 函数
 >>> sorted(student_objects, key=attrgetter('grade', 'age'))
 [('john', 'A', 15), ('dave', 'B', 10), ('jane', 'B', 12)]
 ```
-#### 反向
+##### 反向
 ```python
 >>> sorted(student_tuples, key=itemgetter(2), reverse=True)
 [('john', 'A', 15), ('jane', 'B', 12), ('dave', 'B', 10)]
 ```
 
-#### 排序稳定性
+##### 排序稳定性
 当多个记录具有相同的键值时，将保留其原始顺序。
 ```python
 >>> data = [('red', 1), ('blue', 1), ('red', 2), ('blue', 2)]
@@ -91,5 +91,35 @@ operator 模块有 `itemgetter()` 、 `attrgetter()` 和 `methodcaller()` 函数
 [('blue', 1), ('blue', 2), ('red', 1), ('red', 2)]
 ```
 注意 blue 的两个记录如何保留它们的原始顺序，以便 ('blue', 1) 保证在 ('blue', 2) 之前。
+
+##### 排序不支持原生比较的对象
+```python
+class User:
+    def __init__(self, user_id):
+        self.user_id = user_id
+
+    def __repr__(self):
+        return "User({})".format(self.user_id)
+
+def sort_notcompare():
+    users = [User(23), User(3), User(99)]
+    print(users)
+    print(sorted(users, key=lambda u: u.user_id))
+
+或者是用operator模块：
+from operator import attrgetter
+def sort_notcompare():
+    user = [User(23), User(3), User(99)]
+    print(users)
+    print(sorted(users, key=attrgetter('user_id')))
+```
+用`attrgetter()`方法会比`lambda`方法快一点。
+这个模块也可用于min和max函数：
+```python
+>>> min(users, key=attrgetter('user_id'))
+User(3)
+>>> max(users, key=attrgetter('user_id'))
+User(99)
+```
 
 总结完毕。
