@@ -21,6 +21,24 @@ python序列的排序总结，参考：[https://docs.python.org/zh-cn/3/howto/so
 >>> a
 [1, 2, 3, 4, 5]
 ```
+#### 字典排序
+```python
+from collections import OrderedDict
+import json
+
+d = OrderedDict()
+d['foo'] = 1
+d['bar'] = 2
+d['spam'] = 3
+d['grok'] = 4
+for key in d:
+    print(key, d[key])
+
+print(json.dumps(d))
+```
+如果你想要精确控制以 JSON 编码后字段的顺序，可以用`OrderedDict`。
+OrderedDict 内部维护着一个根据键插入顺序排序的双向链表。每次当一个新的元素插入进来的时候， 它会被放到链表的尾部。对于一个已经存在的键的重复赋值不会改变键的顺序。
+
 #### 关键函数
 `list.sort()`和`sorted()`都有一个key形参来指定在进行比较之前要在每个列表元素上进行调用的函数。
 key形参的值应该是一个函数，它接受一个参数并并返回一个用于排序的键。这种技巧速度很快，因为对于每个输入记录只会调用一次key函数。
