@@ -3,7 +3,8 @@ title: python字符串处理
 date: 2019-10-01 21:54:21
 tags: python
 ---
-
+python字符串处理总结
+<!--more-->
 ### 使用多个界定符分隔字符串
 ```python
 import re
