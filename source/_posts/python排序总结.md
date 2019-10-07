@@ -7,6 +7,8 @@ tags: python
 python序列的排序总结，参考：[https://docs.python.org/zh-cn/3/howto/sorting.html](https://docs.python.org/zh-cn/3/howto/sorting.html)
 
 <!--more-->
+`list.sort`方法会‘就地’排序，不会复制一份新的列表，并且返回None；而`sorted`方法会返回一个列表。
+它们都有两个可选的关键字参数:reverse和key。
 #### 基本排序
 两个方法，只针对列表的`sort()`方法和针对可迭代对象（list,tuple,dict,set,str等，还有生成器，以及带`yield`的生成器方法）的`sorted()`方法。
 `sort()`方法会修改原来的列表，而`sorted()`方法返回一个新的：
@@ -40,8 +42,8 @@ print(json.dumps(d))
 OrderedDict 内部维护着一个根据键插入顺序排序的双向链表。每次当一个新的元素插入进来的时候， 它会被放到链表的尾部。对于一个已经存在的键的重复赋值不会改变键的顺序。
 
 #### 关键函数
-`list.sort()`和`sorted()`都有一个key形参来指定在进行比较之前要在每个列表元素上进行调用的函数。
-key形参的值应该是一个函数，它接受一个参数并并返回一个用于排序的键。这种技巧速度很快，因为对于每个输入记录只会调用一次key函数。
+**`list.sort()`和`sorted()`都有一个key形参来指定在进行比较之前要在每个列表元素上进行调用的函数。**
+key形参的值应该是一个函数，它接受一个参数并返回一个用于排序的键。这种技巧速度很快，因为对于每个输入记录只会调用一次key函数。
 ```python
 >>> sorted("This is a test string from Andrew".split(), key=str.lower)
 ['a', 'Andrew', 'from', 'is', 'string', 'test', 'This']
@@ -139,5 +141,8 @@ User(3)
 >>> max(users, key=attrgetter('user_id'))
 User(99)
 ```
+
+#### 用bisect来管理已排序的序列
+
 
 总结完毕。
