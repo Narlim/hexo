@@ -1,12 +1,22 @@
 from collections import OrderedDict
 import json
+import timeit
 
-d = OrderedDict()
-d['foo'] = 1
-d['bar'] = 2
-d['spam'] = 3
-d['grok'] = 4
-for key in d:
-    print(key, d[key])
 
-print(json.dumps(d))
+
+symbols = '$¢£¥€¤'
+
+colors = ['black', 'white']
+sizes = ['S', 'M', 'L']
+
+
+if __name__ == "__main__":
+    # print(tuple(ord(symbol) for symbol in symbols))
+    # tshirts = [(color, size) for color in colors for size in sizes]
+    for tshirts in ('%s %s' % (c, s) for c in colors for s in sizes):
+        print(tshirts)
+
+    # print(timeit.timeit('"-".join(str(n) for n in range(100))', number=10000))
+    # print(timeit.timeit('char in text', setup='text = "sample string"; char = "g"'))
+    board = [['_'] * 3 for i in range(3)]
+    print(board)
