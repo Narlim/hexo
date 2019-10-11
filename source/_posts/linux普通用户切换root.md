@@ -3,7 +3,7 @@ title: linux普通用户切换root
 date: 2019-10-11 16:29:45
 tags: linux
 ---
-记一次普通用户意外提权到root的操作。
+记一次sudo配置的坑。
 <!--more-->
 下面是当时的sudo配置，在sudoers.d目录下：
 ```shell
