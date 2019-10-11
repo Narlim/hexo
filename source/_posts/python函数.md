@@ -64,3 +64,13 @@ map 和 filter 与列表推导比较:
 ```
 为了使用高阶函数,有时创建一次性的小型函数更便利。这便是匿名函
 数存在的原因.
+
+#### 匿名函数
+
+lambda关键字在python表达式内创建匿名函数。
+```python
+fruits = ['strawberry', 'fig', 'apple', 'cherry', 'raspberry', 'banana']
+sorted(fruits, key=lambda word: word[::-1])
+```
+和def语句一样，lambda表达式会创建函数对象，这是python中几种可调用对象的一种。
+
