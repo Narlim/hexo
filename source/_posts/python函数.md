@@ -3,6 +3,9 @@ title: python函数
 date: 2019-10-10 21:21:36
 tags: python
 ---
+python函数总结, 流畅的python.
+<!--more-->
+
 ### 函数作为对象
 下面的示例展示了函数作为一等对象的本性：
 ```python
