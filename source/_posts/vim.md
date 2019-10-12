@@ -137,3 +137,11 @@ filetype plugin on    " required
 :PluginInstall
 ```
 等待一下，安装所有插件，可以按`:q`退出界面。
+
+#### git默认编辑器改为vim
+nano不太会用= = 
+```shell
+git config --global core.editor vim
+```
+或者打开.git/config文件，在core中添加 editor=vim
+
