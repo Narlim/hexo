@@ -25,7 +25,7 @@ rclone config
 mkdir google-drive
 rclone mount remote:path/to/files /path/to/local/mount
 或者直接挂载整个云盘
-rclone mount google-drive ~/google-drive 
+rclone mount google-drive:/ ~/google-drive 
 ```
 
 #### 移动文件

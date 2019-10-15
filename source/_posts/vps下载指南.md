@@ -51,4 +51,5 @@ $ aria2c http://example.org/mylinux.metalink
 Download URIs found in text file:
 $ aria2c -i uris.txt
 ```
+- -D: 后台下载
 man aria2c
