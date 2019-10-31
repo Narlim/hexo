@@ -1,7 +1,7 @@
 ---
 title: sed(1)
 date: 2019-10-31 20:35:25
-tags: linux,tools
+tags: [linux,sed]
 ---
 sed命令总结。所有例子都来自于[http://www.grymoire.com/Unix/Sed.html#uh-13](http://www.grymoire.com/Unix/Sed.html#uh-13)
 <!--more-->
