@@ -59,9 +59,9 @@ umount /tmp
 umount /data
 ```
 下面看一下目录的权限：
-![](/images/b.png)
+![a](./a.png)
 这个“vagrant”用户就是前面server端“anonuid=1000”的用户，因为客户端也有这个用户，所以显示为“vagrant”，而且“vagrant”这个用户需要在server端对“/data/nfs”这个目录有相应的权限，要不然也是创建不了文件的。
-![](/images/a.png)
+![b](./b.png)
 root用户保持不变。
 
 

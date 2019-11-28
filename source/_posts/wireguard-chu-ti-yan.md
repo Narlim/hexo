@@ -153,13 +153,13 @@ PersistentKeepalive = 25
 在一台vps上部署了，但是就是连不上，后来突然发现是selinux的问题
 查看SELinux当前状态：
 
-```
+```shell
 getenforce
 ```
 
 临时关闭：
 
-```
+```shell
 setenforce 0  
 ```
 
