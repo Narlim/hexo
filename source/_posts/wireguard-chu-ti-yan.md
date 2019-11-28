@@ -11,27 +11,31 @@ WireGuard被视为下一代VPN协议，用来替代OpenVPN，IPSec等VPN协议�
 <!-- more -->
 
 ### 安装
+
 我就按照官方的quick start来写了。😂
 先是服务器端(centos)：
+
 ```shell
-$ yum update -y
-$ sudo curl -Lo /etc/yum.repos.d/wireguard.repo https://copr.fedorainfracloud.org/coprs/jdoss/wireguard/repo/epel-7/jdoss-wireguard-epel-7.repo
-$ sudo yum install epel-release
-$ sudo yum install wireguard-dkms wireguard-tools
+yum update -y
+sudo curl -Lo /etc/yum.repos.d/wireguard.repo https://copr.fedorainfracloud.org/coprs/jdoss/wireguard/repo/epel-7/jdoss-wireguard-epel-7.repo
+sudo yum install epel-release
+sudo yum install wireguard-dkms wireguard-tools
 
 装完之后试一下这个命令：
 ip link add dev wg0 type wireguard
 如果没有报错就ok了，如果有报错可能是linux-headers没有装什么的。
 ```
+
 接下来是步骤，服务端和客户端步骤基本一样，也就是操作下面两次（比如我有两台服务器，ip分别为192.168.2.1，192.168.2.2，那么只要改ip和pubkey就可以了）：
+
 ```shell
-$ wg genkey > private
-$ wg pubkey < private
-$ ip link add dev wg0 type wireguard
-$ wg set wg0 private-key ./private
-$ ip addr add 192.168.2.2/24 dev wg0(给这个虚拟网卡一个ip)
-$ ip link set wg0 up
-$ wg set peer mDSvO/2BLLw7VL8vBEjv0+03RZENksSM/9gxASSxzGQ= allowed-ips 192.168.2.1/32 endpoint 98.142.141.74:36563 (前面为对方的pubkey，endpoint为公网ip)
+wg genkey > private
+wg pubkey < private
+ip link add dev wg0 type wireguard
+wg set wg0 private-key ./private
+ip addr add 192.168.2.2/24 dev wg0(给这个虚拟网卡一个ip)
+ip link set wg0 up
+wg set peer mDSvO/2BLLw7VL8vBEjv0+03RZENksSM/9gxASSxzGQ= allowed-ips 192.168.2.1/32 endpoint 98.142.141.74:36563 (前面为对方的pubkey，endpoint为公网ip)
 
 [root@host ~]# wg
 interface: wg0
@@ -51,16 +55,20 @@ ping 192.168.2.1
 发现成功。
 但是我们并不能直接就可以科学上网。😏
 ```
+
 默认情况下wg0这个网卡，服务器重启以后就会删除，我们需要保存它的配置：
+
 ```shell
 $ wg showconf wg0 > /etc/wireguard/wg0.conf
 加载：
-$ wg setconf wg0 /etc/wireguard/wg0.conf
+wg setconf wg0 /etc/wireguard/wg0.conf
 ```
 
 ### 如何科学上网
+
 接下来就是紧张刺激的正式环节了。
 服务端配置：
+
 ```shell
 $ cat /etc/wireguard/wg0.conf
 [Interface]
@@ -74,17 +82,21 @@ PrivateKey = [SERVER PRIVATE KEY]
 PublicKey = [CLIENT PUBLIC KEY]
 AllowedIPs = 10.0.0.2/32  # 这表示客户端只有一个 ip。
 ```
+
 在这之前我们需要开启服务器的ipv4转发：
+
 ```shell
-$ echo "net.ipv4.ip_forward=1" > /etc/sysctl.conf
+echo "net.ipv4.ip_forward=1" > /etc/sysctl.conf
 $ sysctl -p
 解释一下这个，因为我们的网卡是虚拟的wg0，如果我们想要访问外网就需要把发往wg0的请求转发到eth0网卡上，
 可以理解为只有这个网卡才能访问外网，而开启linux自带的转发功能是第一步。
 ```
+
 下面是第二步，就是几条iptables规则：
+
 ```shell
-$ iptables -A FORWARD -i wg0 -j ACCEPT; 
-$ iptables -A FORWARD -o wg0 -j ACCEPT; 
+iptables -A FORWARD -i wg0 -j ACCEPT;
+iptables -A FORWARD -o wg0 -j ACCEPT;
 $ iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 开启了数据包转发功能还没有完，我们还需要配置规则，告诉数据包怎么走：
 于是我们在FORWARD链配置数据包进出wg0网卡的放行规则，一个进，一个出；
@@ -103,16 +115,20 @@ $ iptables -A FORWARD -i eth0 -o wg0 -m state --state ESTABLISHED,RELATED -j ACC
 这样的话，我们就主动拒绝了从eth0到wg0的请求，可能更安全。
 为什么说可能呢，因为我也不知道有没有主动从eth0到wg0的请求会发过来。🤭
 ```
+
 启动！
+
 ```shell
 开启
 $ wg-quick up wg0
 关闭
 $ wg-quick down wg0
 自启动
-$ systemctl enable wg-quick@wg0
+systemctl enable wg-quick@wg0
 ```
+
 客户端：
+
 ```shell
 $ cat /etc/wireguard/wg0.conf
 [Interface]
@@ -128,7 +144,7 @@ PersistentKeepalive = 25
 ```
 
 下面是手机端的配置：
-![](/images/photo_2019-09-08_15-36-15.jpg)
+![phone](/images/photo_2019-09-08_15-36-15.jpg "phone")
 
 注意这个是vpn，就是默认所有流量都转发，访问国内的网站也是走的vpn，所以会比较慢，但是国外的快啊！而且手机端是支持分引应用代理的。😆
 而且vpn对于匿名性还是挺不错的，想想别人能知道你访问了什么网站，可怕！
@@ -136,18 +152,22 @@ PersistentKeepalive = 25
 20190730更新：
 在一台vps上部署了，但是就是连不上，后来突然发现是selinux的问题
 查看SELinux当前状态：
+
 ```
-$ getenforce
+getenforce
 ```
+
 临时关闭：
+
 ```
-$ setenforce 0  
+setenforce 0  
 ```
+
 或者：
 修改/etc/selinux/config 文件
 SELINUX=enforcing改为SELINUX=disabled
 重启机器即可
 
-引用：    
-https://www.wireguard.com/quickstart/
-https://wiki.archlinux.org/index.php/WireGuard_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)
+引用：
+<https://www.wireguard.com/quickstart/>
+<https://wiki.archlinux.org/index.php/WireGuard_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)>
