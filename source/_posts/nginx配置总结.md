@@ -9,7 +9,7 @@ nginx的一些总结。
 
 ### location匹配规则
 
-```conf
+```nginx
 events {}
   
 http {
@@ -65,7 +65,7 @@ http {
 
 ### rewrite and redirect
 
-```conf
+```nginx
 events {}
   
 http {
@@ -110,7 +110,7 @@ http {
 
 ### 变量
 
-```conf
+```nginx
 events {}
   
 http {
@@ -153,7 +153,7 @@ http {
 
 ### try_files
 
-```conf
+```nginx
 vents {}
   
 http {
@@ -199,7 +199,7 @@ http {
 
 ### 3种指令
 
-```conf
+```nginx
 events {}
 
 ######################
@@ -258,7 +258,7 @@ http {
 
 ### 缓存和超时配置
 
-```conf
+```nginx
 user www-data;
 
 worker_processes auto;
@@ -318,7 +318,7 @@ http {
 
 ### headers and expires
 
-```conf
+```nginx
 worker_processes auto;
   
 events {
