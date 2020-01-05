@@ -1,5 +1,5 @@
 ---
-title: nginx配置总结
+title: nginx配置总结(一)
 date: 2020-01-04 21:28:29
 tags: nginx
 ---
