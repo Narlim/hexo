@@ -4,6 +4,8 @@ date: 2020-01-11 22:06:28
 tags: ['linux', 'shell']
 ---
 
+shell基础
+<!--more-->
 
 ### 管道和重定向
 
@@ -84,3 +86,107 @@ $ find . -type f -name '*.log' 2> /dev/null | grep -v .do-not-touch  | while rea
 
 ### 输入和输出
 
+如果要对输出做更多的控制，需要使用printf命令：
+
+```shell
+$ printf  "\taa\tbb\tcc"
+    aa  bb  cc
+```
+
+用read命令可以提示输入：
+
+```shell
+#!/bin/bash
+
+echo -n "Enter your name: "
+read user_name
+
+if [ -n "$user_name" ]; then
+    echo "Hello, $user_name!"
+    exit 0
+else
+    echo "You did not tell you name!"
+    exit 1
+fi
+```
+
+echo命令的-n选项消除了通常的换行符。if的-n判断其字符串参数是否为空。
+
+### 命令行参数与函数
+
+- $1: 第一个参数
+- $0: 该脚本所用的名字
+- $#: 参数的个数
+- $*: 保存有全部的参数
+
+```shell
+#!/bin/bash
+
+function show_usage {
+    echo "Usage: $0 source_dir dest_dir"
+    exit 1
+}
+
+# Main program starts here
+
+if [ $# -ne 2 ]; then
+    show_usage
+else
+    if [ -d $1 ]; then
+        source_dir=$1
+    else
+        echo "Invalid source directory"
+        show_usage
+    fi
+    if [ -d $2 ]; then
+        dest_dir=$2
+    else
+        echo "Invalid dest directory"
+        show_usage
+    fi
+fi
+
+printf "Source directory is ${source_dir}\n"
+printf "Destination directory is ${dest_dir}\n"
+```
+
+可以改进show_usage函数：
+
+```shell
+function show_usage {
+    echo "Usage: $0 source_dir dest_dir"
+    if [ $# -eq 0 ]; then
+        exit 99
+    else
+        exit $1
+}
+
+可以给一个确定的出错码值：
+show_usage 5
+```
+
+在bash里，函数和命令之间很相似，用户可以在自己的~/.bash_profile文件里面定义自己的函数，然后在命令行上使用它们：
+
+```shell
+function ssh {
+    /usr/bin/ssh -p 7988 $*
+}
+```
+
+### 变量的作用域
+
+在脚本里的变量是全局变量，但是函数可以用local声明语句，创建自己的局部变量。
+
+### 控制流程
+
+```shell
+if [ $base -eq 1 ] && [ $dm -eq 1 ]; then
+    installDMBase
+elif [ $base -ne 1 ] && [ $dm -eq 1 ]; then
+    installBase
+elif [ $base -eq 1 ] && [ $dm -ne 1 ]; then
+    installDM
+else
+    echo '==> Install noting'
+fi
+```
