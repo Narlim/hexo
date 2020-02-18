@@ -190,3 +190,48 @@ else
     echo '==> Install noting'
 fi
 ```
+
+### 循环
+
+可以对*或者?这样的模式匹配符进行扩展：
+
+```bash
+#!/bin/bsh
+
+suffix=BACKUP--`date +%Y%m%d-%H%M`
+
+for script in *.sh; do
+    newname="$script.$suffix"
+    echo "Copying $script to $newname..."
+    cp $script $newname
+done
+```
+
+bash也有标准的for循环：
+
+```bash
+for (( i=0; i < $CPU_COUNT; i++ )); do
+    CPU_LIST="$CPU_LIST $i"
+done
+```
+
+下面是bash的while循环：
+
+```bash
+#!/bin/bash
+
+exec 0<$1
+counter=1
+while read line; do
+    echo "$counter: $line"
+    $((counter++))
+done
+```
+
+下面是输出结果：
+
+```bash
+ubuntu$ sh whileexample /etc/passwd
+```
+
+这里的exec语句重新定义了脚本的标准输入，变成由第一个命令参数指定的文件。 
