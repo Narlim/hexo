@@ -14,4 +14,6 @@ debian的`/etc/resolv.conf`，如果是一个软链接到`/etc/resolvconf/run/re
     dns-nameservers 192.168.2.1
 ```
 
+还有一个配置是`/etc/resolvconf/resolv.conf.d/head`，如果head里面有配置的话，开机也会将配置写入`/etc/resolv.conf`，目录下面还有一个base文件，好像不行。。有点复杂= =。
+
 [debian wiki](https://wiki.debian.org/zh_CN/NetworkConfiguration#A.2BYktSqJFNf25jpVPj-)
