@@ -4,7 +4,7 @@ date: 2020-03-28 13:33:29
 tags: plex
 ---
 
-之前用树莓派配置了透明代理，既然树莓派有千兆网口，还有usb3.0，就想着用来做一个简易的NAS吧，买了一块4T的移动硬盘。
+之前用树莓派配置了透明代理，既然树莓派有千兆网口，还有usb3.0，就想着用来做一个简易的NAS吧，然后看到plex的界面还是挺好看的，自动加封面、局域网同步观看进度等一大堆功能，
 <!--more-->
 usb3.0的理论传输速率是5Gbps，查看一下：
 
@@ -22,9 +22,12 @@ pi@raspberrypi:~ $ lsusb -t
 在树莓派：
 $ nc -l -p 3333 < /dev/zero
 然后在我的主机：
-nc 192.168.2.237 3333 > /dev/null
-最后用nload命令查看，发现最大只有百兆，然后我的路由口都是千兆的，主机的网口也是，最后发现是主机的那条网线只有百兆，于是重新换了一条六类的线。（我以前200兆带宽的时候用的也是那条线啊，干！）
+$ nc 192.168.2.237 3333 > /dev/null
+在pi上用nlaod命令：
+$ nload
 ```
+
+最后发现最大只有百兆，然后我的路由口都是千兆的，主机的网口也是，最后发现是主机的那条网线只支持百兆，于是重新换了一条六类的线。（我以前200兆带宽的时候用的也是那条线啊，干！）
 
 重新测试：
 ![result](./树莓派Plex搭建/Screenshot_20200328_135155.png)
@@ -32,7 +35,8 @@ nc 192.168.2.237 3333 > /dev/null
 ```bash
 rsync -av --progress --remove-source-files your_movie.mkv pi:/media/pi/Movies
 ```
-然后内网传输还是在45MB/s = =。
+
+然后内网传输还是在45MB/s = =。不过比之前还是提升了差不多4倍。
 
 ### 安装plex
 
@@ -73,20 +77,21 @@ sudo mkfs.ext4 /dev/sda1
 ```bash
 sudo mount /dev/sda1 /media/pi
 
-查看
-df -h
-
 设置开机自动挂载，在/etc/fstab写入一下内容：
 /dev/sda1       /media/pi      ext4    defaults  0 0
 ```
+
+`df -h`查看一下：
+![result](./树莓派Plex搭建/Screenshot_20200328_150605.png)
 
 然后就可以在这个目录里面新建你的资源目录，比如movie或者tv，最后在plex添加liarary。
 ![add library](./树莓派Plex搭建/Screenshot_20200328_141754.png)
 
 大功告成！现在就可以欣赏电影啦！
+![result](./树莓派Plex搭建/Screenshot_20200328_150910.png)
 
 还有几个小问题：
-树莓派对于视频的服务端硬解好像不太行，所以必须要用客户端，也就是播放器来硬解，官方也有各种平台的播放器。Windows，ios，macOS等都支持，唯独没有linux。。。如果用网页直接看的话就有点卡。
+树莓派对于视频的服务端硬解好像不太行，所以必须要用客户端，也就是播放器来硬件解码，官方也有各种平台的播放器。Windows，ios，macOS等都支持，唯独没有linux。。。如果用网页直接看的话就有点卡。
 可以用下面这个appImage：
 [https://knapsu.eu/plex/](https://knapsu.eu/plex/)
 
