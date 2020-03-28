@@ -94,6 +94,9 @@ df -h
 下载appImage:
 $ chmod +x Plex_Media_Player_20200326_80d5fa29_x64.AppImage
 
+然后直接运行：
+./Plex_Media_Player_20200326_80d5fa29_x64.AppImage
+
 如果有qt5的报错，执行：
 sudo ln -sf /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms/ /usr/bin/
 ```
