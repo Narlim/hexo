@@ -12,7 +12,7 @@ shell基础
 - 重定向
 下面的命令演示了STDOUT和STDERR分开处理的原因：
 
-```shell
+```bash
 $ find / -name core
 这样会导致很多‘permission denied’这样的信息；
 $ find / -name core 2> /dev/null
@@ -23,7 +23,7 @@ $ find / -name core > /tmp/corefiles 2> /dev/null
 
 - 管道
 
-```shell
+```bash
 $ ps -ef | grep httpd
 把httpd进程打印出来；
 $ cut -d: -f7 < /etc/passwd | sort -u
@@ -34,7 +34,7 @@ $ cut -d: -f7 < /etc/passwd | sort -u
 
 ### 变量和引用
 
-```shell
+```bash
 $ mylang="Pennsylvania Dutch"
 $ echo "I speak ${mylang}"
 I speak Pennsylvania Dutch
@@ -46,7 +46,7 @@ I speak ${mylang}
 
 下面是一个有用的例子：
 
-```shell
+```bash
 $ find . -type f -name '*.log' 2> /dev/null
 ./leather.log
 ./foo.log
@@ -88,14 +88,14 @@ $ find . -type f -name '*.log' 2> /dev/null | grep -v .do-not-touch  | while rea
 
 如果要对输出做更多的控制，需要使用printf命令：
 
-```shell
+```bash
 $ printf  "\taa\tbb\tcc"
     aa  bb  cc
 ```
 
 用read命令可以提示输入：
 
-```shell
+```bash
 #!/bin/bash
 
 echo -n "Enter your name: "
@@ -119,7 +119,7 @@ echo命令的-n选项消除了通常的换行符。if的-n判断其字符串参�
 - $#: 参数的个数
 - $*: 保存有全部的参数
 
-```shell
+```bash
 #!/bin/bash
 
 function show_usage {
@@ -152,7 +152,7 @@ printf "Destination directory is ${dest_dir}\n"
 
 可以改进show_usage函数：
 
-```shell
+```bash
 function show_usage {
     echo "Usage: $0 source_dir dest_dir"
     if [ $# -eq 0 ]; then
@@ -167,7 +167,7 @@ show_usage 5
 
 在bash里，函数和命令之间很相似，用户可以在自己的~/.bash_profile文件里面定义自己的函数，然后在命令行上使用它们：
 
-```shell
+```bash
 function ssh {
     /usr/bin/ssh -p 7988 $*
 }
@@ -179,7 +179,7 @@ function ssh {
 
 ### 控制流程
 
-```shell
+```bash
 if [ $base -eq 1 ] && [ $dm -eq 1 ]; then
     installDMBase
 elif [ $base -ne 1 ] && [ $dm -eq 1 ]; then
@@ -190,3 +190,48 @@ else
     echo '==> Install noting'
 fi
 ```
+
+### 循环
+
+可以对*或者?这样的模式匹配符进行扩展：
+
+```bash
+#!/bin/bsh
+
+suffix=BACKUP--`date +%Y%m%d-%H%M`
+
+for script in *.sh; do
+    newname="$script.$suffix"
+    echo "Copying $script to $newname..."
+    cp $script $newname
+done
+```
+
+bash也有标准的for循环：
+
+```bash
+for (( i=0; i < $CPU_COUNT; i++ )); do
+    CPU_LIST="$CPU_LIST $i"
+done
+```
+
+下面是bash的while循环：
+
+```bash
+#!/bin/bash
+
+exec 0<$1
+counter=1
+while read line; do
+    echo "$counter: $line"
+    $((counter++))
+done
+```
+
+下面是输出结果：
+
+```bash
+ubuntu$ sh whileexample /etc/passwd
+```
+
+这里的exec语句重新定义了脚本的标准输入，变成由第一个命令参数指定的文件。 

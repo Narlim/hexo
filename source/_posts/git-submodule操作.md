@@ -34,3 +34,13 @@ $ vim .git/config
 修改submodule的配置信息。
 $ git commit -a 'info'
 ```
+
+### git改密钥登录（https改为git）
+
+修改`.git`目录的`config`文件：
+
+```bash
+url = https://github.com/test/test.git
+改为：
+url = git@github.com:test/test.git
+```
