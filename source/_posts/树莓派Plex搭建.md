@@ -37,6 +37,9 @@ rsync -av --progress --remove-source-files your_movie.mkv pi:/media/pi/Movies
 ```
 
 然后内网传输还是在45MB/s = =。不过比之前还是提升了差不多4倍。
+> 用dd命令测试磁盘io读写：  
+> 读： `$ dd if=tempfile of=/dev/null bs=1M count=1024`(指定磁盘：`$ dd if=/media/pi/tempfile of=/dev/null bs=1M count=1024`)  
+> 写： `$ sync; dd if=/dev/zero of=tempfile bs=1M count=1024; sync`（指定磁盘: `$ sync; dd if=/dev/zero of=/media/pi/tempfile bs=1M count=1024; sync`）
 
 ### 安装plex
 
