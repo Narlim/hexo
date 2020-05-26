@@ -211,3 +211,144 @@ def clip(text: str, max_len: 'int > 0' = 80) -> str:
 >>> clip.__annotations__
 {'text': <class 'str'>, 'max_len': 'int > 0', 'return': <class 'str'>}
 ```
+
+### 接收任意数量参数的函数
+```python
+def avg(first, *rest):
+    return (first + sum(rest)) / (1 + len(rest))
+
+在这个例子中，rest是由所有其他位置参数组成的元组。然后我们在代码中把它当成了一个序列来进行后续的计算。
+
+如果你还希望某个函数能同时接受任意数量的位置参数和关键字参数，可以同时使用*和**。比如：
+def anyargs(*args, **kwargs):
+    print(args) # A tuple
+    print(kwargs) # A dict
+```
+
+### 只接收关键字参数的函数
+将强制关键字参数放到某个\*参数或者单个\*后面就能达到这种效果。比如：
+```python
+def recv(maxsize, *, block):
+    'Receives a message'
+    pass
+
+recv(1024, True) # TypeError
+recv(1024, block=True) # Ok
+```
+很多情况下，使用强制关键字参数会比使用位置参数表意更加清晰，程序也更加具有可读性。
+
+### 返回多个值的函数
+```python
+def myfun():
+    return 1,2,3
+
+a,b,c = myfunc()
+a
+1
+b
+2
+c
+
+尽管myfun()看上去返回了多个值，实际上是先创建了一个元组然后返回的。 这个语法看上去比较奇怪，实际上我们使用的是逗号来生成一个元组，而不是用括号。比如下面的：
+>>> a = (1, 2) # With parentheses
+>>> a
+(1, 2)
+>>> b = 1, 2 # Without parentheses
+>>> b
+(1, 2)
+>>>
+```
+
+### 定义有默认参数的函数
+```python
+很简单：
+def spam(a, b=42):
+    print(a, b)
+
+spam(1) # Ok. a=1, b=42
+spam(1, 2) # Ok. a=1, b=2
+
+如果默认参数是一个可修改的容器比如一个列表、集合或者字典，可以使用None作为默认值，就像下面这样：
+# Using a list as a default value
+def spam(a, b=None):
+    if b is None:
+        b = []
+    ...
+
+如果你并不想提供一个默认值，而是想仅仅测试下某个默认参数是不是有传递进来，可以像下面这样写：
+_no_value = object()
+def spam(a, b=_no_value):
+    if b is _no_value:
+        print('No b value supplied')
+    ...
+这里对 object() 的使用看上去有点不太常见。object 是python中所有类的基类。 你可以创建 object 类的实例，但是这些实例没什么实际用处，因为它并没有任何有用的方法， 也没有任何实例数据(因为它没有任何的实例字典，你甚至都不能设置任何属性值)。 你唯一能做的就是测试同一性。这个刚好符合我的要求，因为我在函数中就只是需要一个同一性的测试而已。
+
+定义带默认值参数的函数是很简单的,但绝不仅仅只是这个，还有一些东西在这里也深入讨论下:
+>>> x = 42
+>>> def spam(a, b=x):
+...     print(a, b)
+...
+>>> spam(1)
+1 42
+>>> x = 23 # Has no effect
+>>> spam(1)
+1 42
+>>>
+注意到当我们改变x的值的时候对默认参数值并没有影响，这是因为在函数定义的时候就已经确定了它的默认值了。
+其次，默认参数的值应该是不可变的对象，比如None、True、False、数字或字符串。
+```
+
+
+### 匿名函数捕获变量值
+```python
+>>> x = 10
+>>> a = lambda y: x + y
+>>> x = 20
+>>> b = lambda y: x + y
+>>> a(10)
+30
+>>> b(10)
+30
+```
+>这其中的奥妙在于lambda表达式中的x是一个自由变量， 在运行时绑定值，而不是定义时就绑定，这跟函数的默认值参数定义是不同的。 因此，在调用这个lambda表达式的时候，x的值是执行时的值。
+例如：
+```python
+>>> x = 15
+>>> a(10)
+25
+>>> x = 3
+>>> a(10)
+13
+```
+如果你想让某个匿名函数在定义时就捕获到值，可以将那个参数值定义成默认参数即可，就像下面这样：
+```python
+>>> x = 10
+>>> a = lambda y, x=x: x + y
+>>> x = 20
+>>> b = lambda y, x=x: x + y
+>>> a(10)
+20
+>>> b(10)
+30
+
+>>> funcs = [lambda x: x+n for n in range(5)]
+>>> for f in funcs:
+... print(f(0))
+...
+4
+4
+4
+4
+4
+>>>
+
+>>> funcs = [lambda x, n=n: x+n for n in range(5)]
+>>> for f in funcs:
+... print(f(0))
+...
+0
+1
+2
+3
+4
+```
