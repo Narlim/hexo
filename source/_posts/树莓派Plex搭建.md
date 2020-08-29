@@ -83,6 +83,11 @@ sudo mount /dev/sda1 /media/pi
 设置开机自动挂载，在/etc/fstab写入一下内容：
 /dev/sda1       /media/pi      ext4    defaults  0 0
 ```
+更新：前面的分区信息不是很好，因为这个是变化的，比如你移除了一个硬盘，这个值就变了，所以我们用设备的uuid：
+```bash
+UUID=226a1c77-a51a-481e-aa2a-4f5e3c13a3bf       /media/pi	ext4		defaults 	0 0
+```
+后面几个参数的含义就不写了，按照上面的值设定就可以了。
 
 `df -h`查看一下：
 ![result](./树莓派Plex搭建/Screenshot_20200328_150605.png)
