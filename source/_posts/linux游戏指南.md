@@ -1,5 +1,5 @@
 ---
-title: linux游戏指南
+title: linux游戏不完全指南
 date: 2020-10-06 14:00:49
 tags: [linux, game]
 ---
