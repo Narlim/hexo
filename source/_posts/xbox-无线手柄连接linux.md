@@ -53,7 +53,7 @@ sudo pacman -Qs bule
 
 我先没有管，直接重新安装了：
 
-![install](.//xbox-无线手柄连接linux/install.png)
+![install](./xbox-无线手柄连接linux/install.png)
 
 竟然失败了，提示文件不存在！我可没有删除过任何这个目录下的文件啊，查看了文件目录确实没有文件，于是我看了一下install.sh的脚本：
 ```bash
