@@ -8,7 +8,7 @@ tags: [linux]
 <!--more-->
 
 ### 前言
-kde看多了感觉有点无聊于是就尝试了一下之前一直想玩的平铺式的[windows manager](https://en.wikipedia.org/wiki/Window_manager),之前使用的kde其实是[desktop environment](https://en.wikipedia.org/wiki/Desktop_environment)，它包含了wm,当然还有还有其他的软件，比如文件浏览器，终端模拟器等等一整套东西，而wm只是管理你的窗口，其他东西需要自己装，所以相比于de,它占的资源更少。当然还有一个最重要的用wm的原因就是效率高。效率高体现在它控制窗口用的是快捷键。一般我们正常打开关闭或者最小最大化一个窗口都是鼠标点点，但是它用的是组合键。众所周知，键盘肯定是比鼠标要快的。而平铺式的意思就是当前的所有窗口都放
+kde看多了感觉有点无聊于是就尝试了一下之前一直想玩的平铺式的[windows manager](https://en.wikipedia.org/wiki/Window_manager),之前使用的kde其实是[desktop environment](https://en.wikipedia.org/wiki/Desktop_environment)，它包含了wm,当然还有还有其他的软件，比如文件浏览器，终端模拟器等等一整套东西，而wm只是管理你的窗口，其他东西需要自己装，所以相比于de,它占的资源更少。当然还有一个最重要的用wm的原因就是效率高。效率高体现在它控制窗口用的是快捷键。一般我们正常打开关闭或者最小最大化一个窗口都是鼠标点点，但是它用的是组合键。众所周知，键盘肯定是比鼠标要快的。
 
 ### 正文
 #### 选择
