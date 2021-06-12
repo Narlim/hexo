@@ -79,4 +79,5 @@ theme: next
 deploy:
   type: git
   repo: git@github.com:Narlim/narlim.github.io.git
+  # repo: https://github.com/Narlim/narlim.github.io
   branch: master
