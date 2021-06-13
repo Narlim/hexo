@@ -4,7 +4,7 @@ date: 2021-06-13 17:39:57
 tags: ['arch', 'linux', 'trackpad']
 ---
 
-因为gnome40的触摸板手势是一大特色，而且在使用macbook的时候感觉苹果的触摸板确实挺好用的，于是就是入手了一个macgic trackpad2，本来想着是直接蓝牙连接的我的arch上面就可以用了，没想的并没有开箱即用，这里就记录一下配置的过程，防止以后忘记。
+因为gnome40的触摸板手势是一大特色，而且在使用macbook的时候感觉苹果的触摸板确实挺好用的，于是就是入手了一个magic trackpad2，本来想着是直接蓝牙连接的我的arch上面就可以用了，没想的并没有开箱即用，这里就记录一下配置的过程，防止以后忘记。
 <!--more-->
 
 ### 连接到蓝牙
@@ -48,7 +48,7 @@ systemctl status libinput-gestures --user
 其实前面的`libinput-gestures-setup service`就是创建了一个用户的systemd服务，`libinput-gestures-setup start`就等同于`systemctl start libinput-gestures --user`，我也不知道为啥他要自定义这些命令= =
 
 ### 总结
-到手这个trackpad本来以为蓝牙连接上就能直接用了，其实买之前我也看了一篇文章，他用的fedora说是开箱即用的，没想到arch下面还是搞了好久，而且arch下面用trackpad的人好像也不太多，查资料也查了好久，不过最后还是搞定了，虽然过程曲折了一点。
+到手这个trackpad本来以为蓝牙连接上就能直接用了，其实买之前我也看了一篇文章，他用的fedora说是开箱即用的，没想到arch下面还是搞了好久，而且arch下面用trackpad的人好像也不太多，查资料也查了好久，不过最后还是搞定了，虽然过程曲折了一点。里面其实还有很多东西没有弄清楚，到时候有新的内容再来更新。
 
 ### 参考
 - ['https://wiki.archlinux.org/title/Libinput_(%E7https://github.com/bulletmark/libinput-gestures/blob/master/README.md%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)'](https://wiki.archlinux.org/title/Libinput_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
