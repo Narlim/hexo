@@ -13,9 +13,9 @@ tags: ['linux', 'dns']
 用到的几个开源项目：
 - [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 - [privoxy](http://www.privoxy.org/): http代理
-- [dnsmasq]():dns服务器
-- [dnscrypt-proxy](https://github.com/DNSCrypt/dnscrypt-proxy):加密dns请求代理
-- [dnsmasq-china-list](https://github.com/felixonmars/dnsmasq-china-list):国内域名列表。
+- [dnsmasq](): dns服务器
+- [dnscrypt-proxy](https://github.com/DNSCrypt/dnscrypt-proxy): 加密dns请求代理
+- [dnsmasq-china-list](https://github.com/felixonmars/dnsmasq-china-list): 国内域名列表。
 
 ### shadowsocks-libev
 服务器配置：
@@ -41,11 +41,13 @@ tags: ['linux', 'dns']
 这个软件是一个比较老的http代理软件，老不代表差，主要就是用它来做分流。  
 上面那篇文章里面用的是GFW黑名单，意思就是维护一个全部被墙的域名列表，如果请求的域名在列表里面就走代理，如果不在就直连，这样有一个弊端就是如果有新的网站被墙，而列表没有及时更新的话，访问就还是困难。所以我这里就选择另一个方案，白名单;如果访问的域名不在列表里面，全部走代理。
 
-但是我好像没有找到适合`privoxy`的白名单这样的配置，国内域名的列表是有，就是这个：[https://github.com/felixonmars/dnsmasq-china-list](https://github.com/felixonmars/dnsmasq-china-list)
+但是我好像没有找到适合`privoxy`的白名单这样的配置，国内域名的列表是有，就是这个：[https://github.com/felixonmars/dnsmasq-china-list](https://github.com/felixonmars/dnsmasq-china-list)，那就用这个列表来自己动手生成一个配置文件。
 
 因为后面也是要用到`dnsmasq`，也需要这个配置，所以先安装`dnsmasq`并配置。
 
 ### dnsmasq
+dnsmasq我们用它的dns分流和dns缓存功能。
+
 ```shell
 sudo pacman -S dnsmasq
 
@@ -92,7 +94,7 @@ cut -f 2 -d/ accelerated-domains.china.223.6.6.6.conf | sudo tee direct.action
 cut -f 2 -d/ apple.china.223.6.6.6.conf | sudo tee -a direct.action
 cut -f 2 -d/ google.china.223.6.6.6.conf | sudo tee -a direct.action
 
-然后编辑'direct.action'，在所有的域名前面加上"."，并且在第一行加上`{+forward-override{forward .}}`，表示所有的请求直连。
+然后编辑'direct.action'，在所有的域名前面加上"."，并且在第一行加上"{+forward-override{forward .}}"，表示下面这些请求直连。
 ```
 将`direct.action`文件移动到目录`/etc/privoxy`。
 
@@ -109,7 +111,10 @@ actionsfile direct.action # 关键是在这里加上这个
 listen-address  127.0.0.1:8118
 
 ...
-forward-socks5t   /         127.0.0.1:1080 .  # 这个是本地的socks5代理客户端监听的端口，这句的意思是将所有的请求发送到本地代理客户端。因为前面的actionsfile将所有直连的请求过滤了，所以后面的所有请求走代理。
+# 这个是本地的socks5代理客户端监听的端口，这里的意思是将所有的请求发送到本地代理客户端。
+因为前面的actionsfile将所有直连的请求过滤了，所以后面的所有请求走代理。
+
+forward-socks5t   /         127.0.0.1:1080 .  
 ```
 重启`privoxy`.
 
@@ -152,4 +157,4 @@ cache ture
 也有很多网站可以测试dns泄漏问题。就是如果你配置了代理，但是你的dns服务器还是用的isp的，而不是代理的，那么就是dns泄漏。很多vpn如果配置不正确也会有dns泄漏问题。**你以为你在匿名访问一些网站其实被isp看得一清二楚。**
 
 ### 总结
-上面一些开源软件的功能都异常强大，这里只用了很小一部分的功能。如果有错误的地方请大家指出，其实还有更好的方案就是用v2ray,v2ray一个软件应该就能做上面的所有事情。但是我不太会配置v2ray,所有用了上面的方案。最关键的是上面的白名单，感觉确实比黑名单要好很多。引用的一些网站都在上面列出。
+上面一些开源软件的功能都异常强大，这里只用了很小一部分的功能。如果有错误的地方请大家指出，其实还有更好的方案就是用v2ray,v2ray一个软件应该就能做上面的所有事情。但是我不太会配置v2ray,所有用了上面的方案。最关键的是上面的白名单，感觉确实比黑名单要好很多，也解决了dns污染和dns泄漏问题。
