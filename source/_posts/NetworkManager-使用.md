@@ -6,6 +6,7 @@ tags: ['centos', 'network']
 
 NetworkManager 是红帽官方推荐的一个网络配置软件，用来代替老的网络配置脚本。这里介绍一些基本的网络配置命令，来完成静态ip配置以及网络连接的管理。
 
+<!--more-->
 ### 前言
 centos7 系统安装完成之后，默认启用 NetworkManager ，但是同时也支持老的脚本管理方式，脚本可以通过：`systemctl cat network.service` 来查看：
 
